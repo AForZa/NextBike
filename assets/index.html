@@ -1,0 +1,121 @@
+<div>
+    <h2>Get the arrivals for a station</h2>
+    <input type="text" placeholder="Search" />
+    <p id="results"></p>
+</div>
+
+<script>
+    const results = document.getElementById("results");
+	const search = document.querySelector("input");
+    // const apiURL = "https://wild-kerchief-fish.cyclic.app";
+    // const apiURL = "http://localhost:3001"
+    const apiURL = "https://nahsh.arcin.solutions";
+    var limit = 5;
+    var lastSearch = Date.now();
+    const loading = "Loading...";
+    let update = false;
+    const updateDuration = 15000; //ms between each update while viewing departures
+
+    // Update departures every 15 seconds
+    setInterval(async () => {
+        if (!update) return;
+A
+        const id = results.getAttribute("data-id");
+        if (!id) return;
+
+        await updateDepartures(id);
+    }, updateDuration);
+
+    // Event fired when user types in search field
+    search.addEventListener('input', async (event) => {
+        update = false;
+
+        const now = Date.now();
+        // prevent spam requests - wait 500ms each time
+        if (now - lastSearch < 500) return;
+        lastSearch = now;
+
+        if (!search.value) return;
+        // if (search.value.length < 3) return results.innerHTML = "Give me at least 3 characters!"; // start searching after 3 characters
+        results.innerHTML = loading;
+
+        try {
+            var response = await fetch(`${apiURL}/station/${search.value}/${limit}`, {
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "method": "GET",
+            });
+
+            var data = await response.json();
+            if (data.error) {
+                switch (data.error) {
+                    case "NOTHING_FOUND":
+                        return results.innerHTML = "Nothing found :(";
+                    
+                    default:
+                        console.error("Bad response from server", data.error_message);
+                        return alert("Sorry, something went wrong. Please try again later.");
+                }
+            }
+ 
+            results.innerHTML = data.map((item) => {
+                return `<p data-id="${item.id}">${item.name}</p>`;
+            }).join('');
+
+        } catch(e) {
+            console.error("Internal error", e);
+            return alert("Sorry, something went wrong. Please try again later.");
+        }
+    });
+
+    // Event fired when user clicks on a station
+    results.addEventListener('click', async (event) => {
+        if (event.target.tagName !== "P") return;
+        const id = event.target.getAttribute("data-id");
+        if (!id) return;
+
+        results.setAttribute("data-id", id);
+        results.innerHTML = loading;
+
+        await updateDepartures(id);
+    });
+
+    async function updateDepartures(id) {
+        try {
+            var response = await fetch(`${apiURL}/departures/${id}`, {
+                "headers": {
+                    "Content-Type": "application/json",
+                },
+                "method": "GET",
+            });
+
+            var data = await response.json();
+
+            if (data.error) {
+                console.error("Bad response from server", data.error_message);
+                return alert("Sorry, something went wrong. Please try again later.");
+            }
+
+            update = true;
+            if (data.length === 0) return results.innerHTML = "No arrivals found :(";
+
+            results.innerHTML = data.map((item) => {
+                console.log(item)
+                return `<p>${ item.line.id.replace("bus-", "") }, ${item.direction}, ${item.minutes_departure} ${ item.minutes_departure === "Sofort" ? "" : "Min" }</p>`;
+            }).join('');
+
+        } catch(e) {
+            console.error("Internal error", e);
+            return alert("Sorry, something went wrong. Please try again later.");
+        }
+    }
+</script>
+
+<style is:global>
+    p[data-id] > p[data-id] {
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
+</style>

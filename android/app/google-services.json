@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "690955757902",
+    "project_id": "mainapprp",
+    "storage_bucket": "mainapprp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690955757902:android:b4d73de34343050345961f",
+        "android_client_info": {
+          "package_name": "com.main.riverpodversion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690955757902-r40094onskutc9kc32ou2hs8o0d2urs8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.main.riverpodversion",
+            "certificate_hash": "c62cb41e9d37214bf76ea10c9f29c8b5068d6436"
+          }
+        },
+        {
+          "client_id": "690955757902-6245kpf52nvhat81bdeo4av1b7cjq4f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6PsytyyTH6rilsvr5TsujYDZqfPejJRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690955757902-6245kpf52nvhat81bdeo4av1b7cjq4f7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "690955757902-7veec69q5ucrfamr6ngk53inep9uav6f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.main.riverpodversion"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
